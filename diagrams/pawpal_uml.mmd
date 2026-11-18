@@ -40,14 +40,78 @@ classDiagram
         +filter_tasks_by_completion_status(tasks: list~TaskAssignment~, is_completed: bool): list~TaskAssignment~
         +filter_tasks_by_due_status(tasks: list~TaskAssignment~, selected_date: date, status: str): list~TaskAssignment~
         +build_daily_schedule(tasks: list~TaskAssignment~, selected_date: date, available_minutes: Optional~int~): list~TaskAssignment~
+        +find_duplicate_tasks(tasks: list~TaskAssignment~): dict~int, TaskAssignment~
+        +find_free_window(task: CareTask, selected_date: date, windows: list~TimeWindow~): Optional~TimeWindow~
         +find_time_conflicts(tasks: list~TaskAssignment~, selected_date: date): list~tuple~TaskAssignment, TaskAssignment~~
+    }
+
+    class SchedulePlanningAgent {
+        +scheduler: DailyScheduler
+        +create_plan(tasks: list~TaskAssignment~, selected_date: date, available_minutes: Optional~int~, free_windows: Optional~list~TimeWindow~~): SchedulePlan
+    }
+
+    class SchedulePlan {
+        +schedule: list~TaskAssignment~
+        +due_today: list~TaskAssignment~
+        +skipped_tasks: list~tuple~TaskAssignment, str~~
+        +conflicts_resolved: int
+        +duplicate_tasks: list~tuple~TaskAssignment, str~~
+        +free_windows: list~TimeWindow~
+        +outside_window_count: int
     }
 
     class TaskAssignment
     <<type alias>> TaskAssignment
     note for TaskAssignment "tuple[Pet, CareTask]"
 
+    class TimeWindow
+    <<type alias>> TimeWindow
+    note for TimeWindow "tuple[time, time] (start, end)"
+
+    class pawpal_system_helpers {
+        <<module functions>>
+        +parse_clock_time(text: str, meridiem: str): Optional~time~
+        +format_clock_time(value: time): tuple~str, str~
+        +format_window(window: TimeWindow): str
+        +window_minutes(window: TimeWindow): int
+        +validate_free_windows(windows: list~TimeWindow~): Optional~str~
+    }
+
+    class ai_assistant {
+        <<module>>
+        +ask_claude(plan: SchedulePlan, plan_summary: str, selected_date: date, api_key: Optional~str~): CoachReply
+        +summarize_plan(plan: SchedulePlan, owner_name: str, selected_date: date, available_minutes: int): str
+        +offline_reply(plan: SchedulePlan, note: str): CoachReply
+    }
+
+    class CoachReply {
+        +text: str
+        +used_ai: bool
+        +input_tokens: int
+        +output_tokens: int
+        +estimated_cost_usd: float
+        +note: str
+        +suggestions: list~Optional~RescheduleSuggestion~~
+        +tips: list~str~
+    }
+
+    class RescheduleSuggestion {
+        +suggested_date: date
+        +suggested_time: time
+        +reason: str
+    }
+
     Owner "0..*" --> "1..*" Pet : contains
     Pet "0..1" <-- "0..*" CareTask : attached to
     DailyScheduler ..> Owner : retrieves assignments
     DailyScheduler ..> TaskAssignment : filters and schedules
+    DailyScheduler ..> TimeWindow : checks tasks fit
+    SchedulePlanningAgent --> DailyScheduler : uses
+    SchedulePlanningAgent ..> TaskAssignment : plans tasks
+    SchedulePlanningAgent ..> SchedulePlan : returns
+    SchedulePlan ..> TaskAssignment : contains
+    SchedulePlan ..> TimeWindow : records free windows
+    pawpal_system_helpers ..> TimeWindow : formats and validates
+    ai_assistant ..> SchedulePlan : reads
+    ai_assistant ..> CoachReply : returns
+    CoachReply "1" --> "0..*" RescheduleSuggestion : suggestions

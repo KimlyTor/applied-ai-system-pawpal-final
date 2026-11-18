@@ -1,0 +1,21 @@
+flowchart TD
+    prepare["1. Prepare today's tasks<br/>Leave out duplicates • sort by priority, then due time"]
+    check{"2. For each task: does it fit<br/>your free time with no overlap?"}
+    add["Add to plan<br/>Inside your free time"]
+    skip["Skip it<br/>Note why"]
+    show["3. Show the daily plan<br/>Banner + reasons for skipped tasks"]
+    skipped{"Any skipped<br/>tasks?"}
+    done["Done<br/>Plan is ready"]
+    claude["4. Optional: ask Claude<br/>Explains the plan • suggests new times • care tips"]
+    apply["5. Owner picks a time and clicks Apply<br/>Claude's time, an edited time, or their own"]
+
+    prepare --> check
+    check -->|Yes| add
+    check -->|No| skip
+    add --> show
+    skip --> show
+    show --> skipped
+    skipped -->|No| done
+    skipped -->|Yes| claude
+    claude --> apply
+    apply -->|Plan is rebuilt and re-checked| prepare

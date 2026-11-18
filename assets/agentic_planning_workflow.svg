@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1080" viewBox="0 0 1000 1080" role="img" aria-labelledby="title description">
+  <title id="title">PawPal+ agentic planning workflow</title>
+  <desc id="description">1. Prepare today's tasks: leave out duplicates and sort by priority, then due time. 2. For each task, add it to the plan if it fits the owner's free time with no overlap; otherwise skip it and note why. 3. Show the daily plan with a banner and reasons for skipped tasks. If nothing was skipped, the plan is done. Otherwise, 4. optionally ask Claude to explain the plan, suggest new times, and share care tips, and 5. the owner picks a time and clicks Apply, which rebuilds and re-checks the plan.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,5 L0,10 z" fill="#526477"/>
+    </marker>
+    <style>
+      .bg { fill: #f7fafc; }
+      .node { fill: #ffffff; stroke: #6b8196; stroke-width: 2; }
+      .action { fill: #e8f3ff; stroke: #4285b4; stroke-width: 2; }
+      .decision { fill: #fff4d6; stroke: #ca9b31; stroke-width: 2; }
+      .success { fill: #e6f5eb; stroke: #4a9b65; stroke-width: 2; }
+      .skipped { fill: #fff0ed; stroke: #ce705f; stroke-width: 2; }
+      .ai { fill: #f1ecfb; stroke: #7b61a8; stroke-width: 2; }
+      .line { fill: none; stroke: #526477; stroke-width: 2.5; marker-end: url(#arrow); }
+      .join { fill: none; stroke: #526477; stroke-width: 2.5; }
+      .label { font: 600 18px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #203040; text-anchor: middle; }
+      .small { font: 16px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #405366; text-anchor: middle; }
+      .branch { font: 600 15px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #405366; }
+      .heading { font: 700 28px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #203040; text-anchor: middle; }
+      .subheading { font: 16px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #526477; text-anchor: middle; }
+    </style>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1000" height="1080" rx="20"/>
+  <text class="heading" x="500" y="48">PawPal+ Agentic Planning Workflow</text>
+  <text class="subheading" x="500" y="78">Plan → Check → Owner decides</text>
+
+  <!-- 1. Prepare -->
+  <rect class="action" x="250" y="110" width="500" height="76" rx="14"/>
+  <text class="label" x="500" y="142">1. Prepare today's tasks</text>
+  <text class="small" x="500" y="168">Leave out duplicates • sort by priority, then due time</text>
+
+  <!-- 2. Check each task -->
+  <path class="line" d="M500 186 V216"/>
+  <polygon class="decision" points="500,220 760,300 500,380 240,300"/>
+  <text class="label" x="500" y="292">2. For each task: does it fit</text>
+  <text class="label" x="500" y="316">your free time with no overlap?</text>
+
+  <path class="line" d="M240 300 H200 V420"/>
+  <text class="branch" x="208" y="288">Yes</text>
+  <rect class="success" x="80" y="425" width="240" height="76" rx="14"/>
+  <text class="label" x="200" y="457">Add to plan</text>
+  <text class="small" x="200" y="482">Inside your free time</text>
+
+  <path class="line" d="M760 300 H800 V420"/>
+  <text class="branch" x="770" y="288">No</text>
+  <rect class="skipped" x="680" y="425" width="240" height="76" rx="14"/>
+  <text class="label" x="800" y="457">Skip it</text>
+  <text class="small" x="800" y="482">Note why</text>
+
+  <!-- 3. Show the plan -->
+  <path class="line" d="M200 501 V540 H500 V566"/>
+  <path class="join" d="M800 501 V540 H500"/>
+  <rect class="action" x="250" y="570" width="500" height="76" rx="14"/>
+  <text class="label" x="500" y="602">3. Show the daily plan</text>
+  <text class="small" x="500" y="627">Banner + reasons for skipped tasks</text>
+
+  <!-- Any skipped? -->
+  <path class="line" d="M500 646 V676"/>
+  <polygon class="decision" points="500,680 680,740 500,800 320,740"/>
+  <text class="label" x="500" y="734">Any skipped</text>
+  <text class="label" x="500" y="758">tasks?</text>
+
+  <path class="line" d="M680 740 H725"/>
+  <text class="branch" x="688" y="728">No</text>
+  <rect class="success" x="730" y="702" width="220" height="76" rx="14"/>
+  <text class="label" x="840" y="734">Done</text>
+  <text class="small" x="840" y="759">Plan is ready</text>
+
+  <!-- 4. Optional: ask Claude -->
+  <path class="line" d="M500 800 V830"/>
+  <text class="branch" x="512" y="822">Yes</text>
+  <rect class="ai" x="220" y="835" width="560" height="80" rx="14"/>
+  <text class="label" x="500" y="867">4. Optional: ask Claude</text>
+  <text class="small" x="500" y="893">Explains the plan • suggests new times • care tips</text>
+
+  <!-- 5. Owner applies -->
+  <path class="line" d="M500 915 V945"/>
+  <rect class="success" x="220" y="950" width="560" height="80" rx="14"/>
+  <text class="label" x="500" y="982">5. Owner picks a time and clicks Apply</text>
+  <text class="small" x="500" y="1008">Claude's time, an edited time, or their own</text>
+
+  <!-- Loop back to step 1 -->
+  <path class="line" d="M220 990 H40 V148 H245"/>
+  <text class="branch" x="58" y="570" transform="rotate(-90 58 570)" text-anchor="middle">Plan is rebuilt and re-checked</text>
+</svg>

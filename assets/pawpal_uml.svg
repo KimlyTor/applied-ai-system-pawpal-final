@@ -1,0 +1,247 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 1600 2230" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="title desc">
+  <title id="title">PawPal UML class diagram</title>
+  <desc id="desc">Class relationships and key members for Owner, Pet, CareTask, DailyScheduler, SchedulePlanningAgent, SchedulePlan, TaskAssignment, and TimeWindow, plus the time and free-window helper functions and the Claude coach module (ai_assistant) with CoachReply and RescheduleSuggestion.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0L10 5L0 10Z" fill="#526078"/>
+    </marker>
+    <marker id="dashed-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0L10 5L0 10Z" fill="#7b61a8"/>
+    </marker>
+    <style>
+      text { font-family: Inter, "Segoe UI", Arial, sans-serif; fill: #253047; }
+      .title { font-size: 30px; font-weight: 700; }
+      .section { font-size: 22px; font-weight: 700; }
+      .subtitle { font-size: 16px; fill: #68748a; }
+      .class-name { font-size: 21px; font-weight: 700; }
+      .stereotype { font-size: 13px; font-weight: 700; letter-spacing: 1px; fill: #6e56a0; }
+      .member { font-size: 15px; }
+      .divider { stroke: #d7ddec; stroke-width: 1.5; }
+      .card { fill: #fff; stroke: #8b78bf; stroke-width: 2; }
+      .card-head { fill: #f0edfa; }
+      .relation { fill: none; stroke: #526078; stroke-width: 2.2; marker-end: url(#arrow); }
+      .dependency { fill: none; stroke: #7b61a8; stroke-width: 2; stroke-dasharray: 7 6; marker-end: url(#dashed-arrow); }
+      .label { font-size: 14px; font-weight: 600; fill: #526078; }
+      .mult { font-size: 13px; fill: #68748a; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="2230" rx="24" fill="#f8f9fd"/>
+  <text class="title" x="70" y="52">PawPal system</text>
+  <text class="subtitle" x="70" y="78">UML class diagram — reflects the final pawpal_system.py and ai_assistant.py implementation</text>
+
+  <!-- Owner -->
+  <g>
+    <rect class="card" x="70" y="110" width="570" height="230" rx="12"/>
+    <path class="card-head" d="M82 110H628a12 12 0 0 1 12 12v49H70v-49a12 12 0 0 1 12-12Z"/>
+    <text class="class-name" x="355" y="150" text-anchor="middle">Owner</text>
+    <line class="divider" x1="70" y1="171" x2="640" y2="171"/>
+    <text class="member" x="94" y="201">+ name: str</text>
+    <text class="member" x="94" y="225">+ pets: list[Pet]</text>
+    <line class="divider" x1="70" y1="241" x2="640" y2="241"/>
+    <text class="member" x="94" y="269">+ update_details(name)</text>
+    <text class="member" x="94" y="293">+ add_pet(pet) · list_pets()</text>
+    <text class="member" x="94" y="317">+ get_all_tasks() · remove_pet(pet)</text>
+  </g>
+
+  <!-- Pet -->
+  <g>
+    <rect class="card" x="70" y="410" width="570" height="270" rx="12"/>
+    <path class="card-head" d="M82 410H628a12 12 0 0 1 12 12v49H70v-49a12 12 0 0 1 12-12Z"/>
+    <text class="class-name" x="355" y="450" text-anchor="middle">Pet</text>
+    <line class="divider" x1="70" y1="471" x2="640" y2="471"/>
+    <text class="member" x="94" y="501">+ name: str · species: str</text>
+    <text class="member" x="94" y="525">+ tasks: list[CareTask]</text>
+    <line class="divider" x1="70" y1="541" x2="640" y2="541"/>
+    <text class="member" x="94" y="569">+ update_details(name, species)</text>
+    <text class="member" x="94" y="593">+ add_task(task) · list_tasks()</text>
+    <text class="member" x="94" y="617">+ remove_task(task) · complete_task(task)</text>
+  </g>
+
+  <!-- CareTask -->
+  <g>
+    <rect class="card" x="70" y="750" width="570" height="270" rx="12"/>
+    <path class="card-head" d="M82 750H628a12 12 0 0 1 12 12v49H70v-49a12 12 0 0 1 12-12Z"/>
+    <text class="class-name" x="355" y="790" text-anchor="middle">CareTask</text>
+    <line class="divider" x1="70" y1="811" x2="640" y2="811"/>
+    <text class="member" x="94" y="841">+ description: str · title: str</text>
+    <text class="member" x="94" y="865">+ due_date: datetime · is_completed: bool</text>
+    <text class="member" x="94" y="889">+ duration_minutes: int · priority: str</text>
+    <text class="member" x="94" y="913">+ frequency: str</text>
+    <text class="member" x="94" y="937">- _pet: Optional[Pet]</text>
+    <line class="divider" x1="70" y1="953" x2="640" y2="953"/>
+    <text class="member" x="94" y="981">+ is_due_on(selected_date) · mark_complete()</text>
+  </g>
+
+  <!-- SchedulePlan -->
+  <g>
+    <rect class="card" x="70" y="1140" width="570" height="340" rx="12"/>
+    <path class="card-head" d="M82 1140H628a12 12 0 0 1 12 12v49H70v-49a12 12 0 0 1 12-12Z"/>
+    <text class="class-name" x="355" y="1180" text-anchor="middle">SchedulePlan</text>
+    <line class="divider" x1="70" y1="1201" x2="640" y2="1201"/>
+    <text class="member" x="94" y="1231">+ schedule: list[TaskAssignment]</text>
+    <text class="member" x="94" y="1255">+ due_today: list[TaskAssignment]</text>
+    <text class="member" x="94" y="1279">+ skipped_tasks: list[(TaskAssignment, str)]</text>
+    <text class="member" x="94" y="1303">+ conflicts_resolved: int</text>
+    <text class="member" x="94" y="1327">+ duplicate_tasks: list[(TaskAssignment, str)]</text>
+    <text class="member" x="94" y="1351">+ free_windows: list[TimeWindow]</text>
+    <text class="member" x="94" y="1375">+ outside_window_count: int</text>
+    <line class="divider" x1="70" y1="1393" x2="640" y2="1393"/>
+    <text class="subtitle" x="94" y="1426">Contains the final schedule, the free windows used,</text>
+    <text class="subtitle" x="94" y="1452">and a reason for every task that was left out.</text>
+  </g>
+
+  <!-- DailyScheduler -->
+  <g>
+    <rect class="card" x="800" y="160" width="630" height="470" rx="12"/>
+    <path class="card-head" d="M812 160H1418a12 12 0 0 1 12 12v49H800v-49a12 12 0 0 1 12-12Z"/>
+    <text class="class-name" x="1115" y="200" text-anchor="middle">DailyScheduler</text>
+    <line class="divider" x1="800" y1="221" x2="1430" y2="221"/>
+    <text class="member" x="826" y="254">+ get_tasks(owner)</text>
+    <text class="member" x="826" y="286">+ sort_tasks_by_due_date(tasks)</text>
+    <text class="member" x="826" y="318">+ sort_by_time(tasks)</text>
+    <text class="member" x="826" y="350">+ filter_tasks_by_completion_status(tasks, is_completed)</text>
+    <text class="member" x="826" y="382">+ filter_tasks_by_due_status(tasks, selected_date, status)</text>
+    <text class="member" x="826" y="414">+ build_daily_schedule(tasks, selected_date, available_minutes)</text>
+    <text class="member" x="826" y="446">+ find_duplicate_tasks(tasks)</text>
+    <text class="member" x="826" y="478">+ find_free_window(task, selected_date, windows)</text>
+    <text class="member" x="826" y="510">+ find_time_conflicts(tasks, selected_date)</text>
+    <line class="divider" x1="800" y1="538" x2="1430" y2="538"/>
+    <text class="subtitle" x="826" y="573">Filters, prioritizes, and schedules tasks; finds duplicates,</text>
+    <text class="subtitle" x="826" y="599">overlapping times, and the free window that fits a task.</text>
+  </g>
+
+  <!-- TaskAssignment -->
+  <g>
+    <rect class="card" x="800" y="720" width="300" height="130" rx="12"/>
+    <path class="card-head" d="M812 720H1088a12 12 0 0 1 12 12v40H800v-40a12 12 0 0 1 12-12Z"/>
+    <text class="stereotype" x="950" y="744" text-anchor="middle">TYPE ALIAS</text>
+    <text class="class-name" x="950" y="797" text-anchor="middle">TaskAssignment</text>
+    <text class="member" x="950" y="826" text-anchor="middle">tuple[Pet, CareTask]</text>
+  </g>
+
+  <!-- TimeWindow -->
+  <g>
+    <rect class="card" x="1130" y="720" width="300" height="130" rx="12"/>
+    <path class="card-head" d="M1142 720H1418a12 12 0 0 1 12 12v40H1130v-40a12 12 0 0 1 12-12Z"/>
+    <text class="stereotype" x="1280" y="744" text-anchor="middle">TYPE ALIAS</text>
+    <text class="class-name" x="1280" y="797" text-anchor="middle">TimeWindow</text>
+    <text class="member" x="1280" y="826" text-anchor="middle">tuple[time, time] (start, end)</text>
+  </g>
+
+  <!-- SchedulePlanningAgent -->
+  <g>
+    <rect class="card" x="800" y="930" width="630" height="270" rx="12"/>
+    <path class="card-head" d="M812 930H1418a12 12 0 0 1 12 12v49H800v-49a12 12 0 0 1 12-12Z"/>
+    <text class="class-name" x="1115" y="970" text-anchor="middle">SchedulePlanningAgent</text>
+    <line class="divider" x1="800" y1="991" x2="1430" y2="991"/>
+    <text class="member" x="826" y="1022">+ scheduler: DailyScheduler</text>
+    <line class="divider" x1="800" y1="1038" x2="1430" y2="1038"/>
+    <text class="member" x="826" y="1068">+ create_plan(tasks, selected_date,</text>
+    <text class="member" x="850" y="1092">available_minutes=None, free_windows=None)</text>
+    <line class="divider" x1="800" y1="1110" x2="1430" y2="1110"/>
+    <text class="subtitle" x="826" y="1143">Leaves out duplicates, then adds tasks by priority only if</text>
+    <text class="subtitle" x="826" y="1169">they fit a free window and don't overlap; checks the result.</text>
+  </g>
+
+  <!-- Bottom row heading -->
+  <line class="divider" x1="70" y1="1530" x2="1430" y2="1530"/>
+  <text class="section" x="70" y="1562">Helpers and Claude coach</text>
+
+  <!-- pawpal_system helpers -->
+  <g>
+    <rect class="card" x="70" y="1590" width="570" height="270" rx="12"/>
+    <path class="card-head" d="M82 1590H628a12 12 0 0 1 12 12v59H70v-59a12 12 0 0 1 12-12Z"/>
+    <text class="stereotype" x="355" y="1614" text-anchor="middle">MODULE FUNCTIONS</text>
+    <text class="class-name" x="355" y="1643" text-anchor="middle">pawpal_system helpers</text>
+    <line class="divider" x1="70" y1="1661" x2="640" y2="1661"/>
+    <text class="member" x="94" y="1691">+ parse_clock_time(text, meridiem)</text>
+    <text class="member" x="94" y="1715">+ format_clock_time(value)</text>
+    <text class="member" x="94" y="1739">+ format_window(window) · window_minutes(window)</text>
+    <text class="member" x="94" y="1763">+ validate_free_windows(windows)</text>
+    <line class="divider" x1="70" y1="1781" x2="640" y2="1781"/>
+    <text class="subtitle" x="94" y="1814">Read and format 12-hour times like 9:20 AM, and</text>
+    <text class="subtitle" x="94" y="1840">check that free windows don't overlap.</text>
+  </g>
+
+  <!-- ai_assistant -->
+  <g>
+    <rect class="card" x="800" y="1590" width="630" height="270" rx="12"/>
+    <path class="card-head" d="M812 1590H1418a12 12 0 0 1 12 12v59H800v-59a12 12 0 0 1 12-12Z"/>
+    <text class="stereotype" x="1115" y="1614" text-anchor="middle">MODULE</text>
+    <text class="class-name" x="1115" y="1643" text-anchor="middle">ai_assistant</text>
+    <line class="divider" x1="800" y1="1661" x2="1430" y2="1661"/>
+    <text class="member" x="826" y="1691">+ ask_claude(plan, plan_summary, selected_date, api_key)</text>
+    <text class="member" x="826" y="1715">+ summarize_plan(plan, owner_name, selected_date, minutes)</text>
+    <text class="member" x="826" y="1739">+ offline_reply(plan, note)</text>
+    <line class="divider" x1="800" y1="1757" x2="1430" y2="1757"/>
+    <text class="subtitle" x="826" y="1790">One Claude call returns why the plan works, a suggested</text>
+    <text class="subtitle" x="826" y="1816">time per skipped task, and care tips. Never edits the plan.</text>
+  </g>
+
+  <!-- RescheduleSuggestion -->
+  <g>
+    <rect class="card" x="70" y="1940" width="570" height="170" rx="12"/>
+    <path class="card-head" d="M82 1940H628a12 12 0 0 1 12 12v49H70v-49a12 12 0 0 1 12-12Z"/>
+    <text class="class-name" x="355" y="1980" text-anchor="middle">RescheduleSuggestion</text>
+    <line class="divider" x1="70" y1="2001" x2="640" y2="2001"/>
+    <text class="member" x="94" y="2031">+ suggested_date: date</text>
+    <text class="member" x="94" y="2055">+ suggested_time: time</text>
+    <text class="member" x="94" y="2079">+ reason: str</text>
+  </g>
+
+  <!-- CoachReply -->
+  <g>
+    <rect class="card" x="800" y="1940" width="630" height="250" rx="12"/>
+    <path class="card-head" d="M812 1940H1418a12 12 0 0 1 12 12v49H800v-49a12 12 0 0 1 12-12Z"/>
+    <text class="class-name" x="1115" y="1980" text-anchor="middle">CoachReply</text>
+    <line class="divider" x1="800" y1="2001" x2="1430" y2="2001"/>
+    <text class="member" x="826" y="2031">+ text: str · used_ai: bool · note: str</text>
+    <text class="member" x="826" y="2055">+ input_tokens: int · output_tokens: int</text>
+    <text class="member" x="826" y="2079">+ estimated_cost_usd: float</text>
+    <text class="member" x="826" y="2103">+ suggestions: list[Optional[RescheduleSuggestion]]</text>
+    <text class="member" x="826" y="2127">+ tips: list[str]</text>
+  </g>
+
+  <!-- Relationships -->
+  <path class="relation" d="M355 340V410"/>
+  <text class="mult" x="365" y="360">0..*</text>
+  <text class="mult" x="365" y="402">1..*</text>
+  <text class="label" x="384" y="381">contains</text>
+
+  <path class="relation" d="M355 750V680"/>
+  <text class="mult" x="365" y="700">0..1</text>
+  <text class="mult" x="365" y="742">0..*</text>
+  <text class="label" x="384" y="721">attached to</text>
+
+  <path class="dependency" d="M950 630V720"/>
+  <text class="label" x="962" y="680">uses</text>
+
+  <path class="dependency" d="M1280 630V720"/>
+  <text class="label" x="1292" y="680">checks tasks fit</text>
+
+  <path class="dependency" d="M800 265H710V130H640"/>
+  <rect x="649" y="180" width="122" height="40" rx="6" fill="#f8f9fd"/>
+  <text class="label" x="710" y="196" text-anchor="middle">gets tasks</text>
+  <text class="label" x="710" y="213" text-anchor="middle">from owner</text>
+
+  <path class="dependency" d="M1430 980H1480V190H1430"/>
+  <text class="label" x="1491" y="585" transform="rotate(-90 1491 585)" text-anchor="middle">uses</text>
+
+  <path class="dependency" d="M800 1100H700V1200H640"/>
+  <text class="label" x="752" y="1090" text-anchor="middle">creates</text>
+
+  <path class="dependency" d="M640 1300H680V785H800"/>
+  <text class="label" x="690" y="960" transform="rotate(-90 690 960)" text-anchor="middle">contains task assignments</text>
+
+  <path class="dependency" d="M800 1700H720V1440H640"/>
+  <text class="label" x="760" y="1570" text-anchor="middle">reads</text>
+
+  <path class="dependency" d="M1115 1860V1940"/>
+  <text class="label" x="1127" y="1905">returns</text>
+
+  <path class="relation" d="M800 2025H640"/>
+  <text class="mult" x="780" y="2015" text-anchor="end">1</text>
+  <text class="mult" x="650" y="2015">0..*</text>
+  <text class="label" x="720" y="2048" text-anchor="middle">suggestions</text>
+</svg>
